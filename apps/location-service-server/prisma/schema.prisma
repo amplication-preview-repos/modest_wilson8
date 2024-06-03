@@ -1,0 +1,28 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Location {
+  createdAt  DateTime    @default(now())
+  dataPoints DataPoint[]
+  id         String      @id @default(cuid())
+  latitude   Float?
+  longitude  Float?
+  name       String?
+  updatedAt  DateTime    @updatedAt
+}
+
+model DataPoint {
+  createdAt  DateTime  @default(now())
+  id         String    @id @default(cuid())
+  location   Location? @relation(fields: [locationId], references: [id])
+  locationId String?
+  timestamp  DateTime?
+  updatedAt  DateTime  @updatedAt
+  value      Float?
+}
